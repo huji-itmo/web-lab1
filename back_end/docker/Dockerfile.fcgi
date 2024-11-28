@@ -1,0 +1,10 @@
+FROM openjdk:17
+
+WORKDIR /usr/src/app
+
+ARG FCGI_PORT
+ARG JAR_PATH
+
+EXPOSE $FCGI_PORT
+
+CMD java -DFCGI_PORT=$FCGI_PORT -jar lab1.jar

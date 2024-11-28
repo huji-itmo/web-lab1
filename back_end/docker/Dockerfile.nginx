@@ -1,0 +1,12 @@
+FROM nginx:latest
+
+# ARG PROJECT_DIR="/home/huji/web/lab1/"
+ARG FCGI_PORT
+
+RUN rm -rf /etc/nginx/conf.d/*
+
+COPY /docker/nginx.conf /etc/nginx/conf.d/
+
+# COPY static_content/ /var/www/static/
+
+EXPOSE 8080

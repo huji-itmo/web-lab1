@@ -1,0 +1,38 @@
+services:
+  fcgi-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.fcgi
+    container_name: fcgi-server
+    environment:
+      - FCGI_PORT=${FCGI_PORT}
+      - JAR_PATH=${JAR_PATH}
+    ports:
+      - "${FCGI_PORT}:${FCGI_PORT}"
+    networks:
+      - fcgi-network
+    volumes:
+    # тут не от контекста а от докер компоуз файла
+      - ../build/libs:/usr/src/app
+
+  nginx:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.nginx
+    container_name: nginx
+    environment:
+      - fcgi_port=${FCGI_PORT}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - fcgi-server
+    networks:
+      - fcgi-network
+    volumes:
+    # тут не от контекста а от докер компоуз файла
+      - ./../../front_end/static_content:/etc/nginx/www
+
+networks:
+  fcgi-network:
+    driver: bridge
+
